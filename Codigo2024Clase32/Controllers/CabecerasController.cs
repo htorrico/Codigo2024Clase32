@@ -14,22 +14,23 @@ namespace Codigo2024Clase32.Controllers
 {
     public class CabecerasController : ApiController
     {
-        private FacturaDBEntities db = new FacturaDBEntities();
+        private FacturaDBEntities context = new FacturaDBEntities();
        
 
         // GET: api/Cabeceras
         public IQueryable<Cabecera> GetCabecera()
         {
-            //return db.Cabecera.Include(x=>x.Detalle) ;
-            var cabeceras = db.Cabecera.ToList();
-            return db.Cabecera;
+            //Linq=>Expresiones Lambda (Funciones flecha)            
+            var query = context.Cabecera.Where(x => x.Activo == true);
+
+            return query;
         }
 
         // GET: api/Cabeceras/5
         [ResponseType(typeof(Cabecera))]
         public IHttpActionResult GetCabecera(int id)
         {
-            Cabecera cabecera = db.Cabecera.Find(id);
+            Cabecera cabecera = context.Cabecera.Find(id);
             if (cabecera == null)
             {
                 return NotFound();
@@ -52,11 +53,11 @@ namespace Codigo2024Clase32.Controllers
                 return BadRequest();
             }
 
-            db.Entry(cabecera).State = EntityState.Modified;
+            context.Entry(cabecera).State = EntityState.Modified;
 
             try
             {
-                db.SaveChanges();
+                context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,8 +83,8 @@ namespace Codigo2024Clase32.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Cabecera.Add(cabecera);
-            db.SaveChanges();
+            context.Cabecera.Add(cabecera);
+            context.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = cabecera.IdCabecera }, cabecera);
         }
@@ -92,16 +93,16 @@ namespace Codigo2024Clase32.Controllers
         [ResponseType(typeof(Cabecera))]
         public IHttpActionResult DeleteCabecera(int id)
         {
-            Cabecera cabecera = db.Cabecera.Find(id);
+            Cabecera cabecera = context.Cabecera.Find(id);
             if (cabecera == null)
             {
                 return NotFound();
             }
-            db.Entry(cabecera).State = EntityState.Modified;
+            context.Entry(cabecera).State = EntityState.Modified;
             
             cabecera.Activo = false;
 
-            db.SaveChanges();
+            context.SaveChanges();
 
             return Ok(cabecera);
         }
@@ -125,14 +126,14 @@ namespace Codigo2024Clase32.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                context.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool CabeceraExists(int id)
         {
-            return db.Cabecera.Count(e => e.IdCabecera == id) > 0;
+            return context.Cabecera.Count(e => e.IdCabecera == id) > 0;
         }
     }
 }
