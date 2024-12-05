@@ -18,10 +18,12 @@ namespace Codigo2024Clase32.Controllers
        
 
         // GET: api/Cabeceras
-        public IQueryable<Cabecera> GetCabecera()
+        public IQueryable<Cabecera> GetCabecera(string cliente)
         {
             //Linq=>Expresiones Lambda (Funciones flecha)            
-            var query = context.Cabecera.Where(x => x.Activo == true);
+            var query = context.Cabecera.Where(x => x.Activo == true
+            && x.Cliente.Contains(cliente)
+            );
 
             return query;
         }
