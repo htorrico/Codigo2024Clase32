@@ -97,12 +97,29 @@ namespace Codigo2024Clase32.Controllers
             {
                 return NotFound();
             }
+            db.Entry(cabecera).State = EntityState.Modified;
+            
+            cabecera.Activo = false;
 
-            db.Cabecera.Remove(cabecera);
             db.SaveChanges();
 
             return Ok(cabecera);
         }
+
+
+        //public IHttpActionResult DeleteCabecera(int id)
+        //{
+        //    Cabecera cabecera = db.Cabecera.Find(id);
+        //    if (cabecera == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    db.Cabecera.Remove(cabecera);
+        //    db.SaveChanges();
+
+        //    return Ok(cabecera);
+        //}
 
         protected override void Dispose(bool disposing)
         {
